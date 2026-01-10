@@ -19,7 +19,7 @@ export default function BrutalButton({
   ...props
 }: BrutalButtonProps) {
   const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-accent-salmon',
+    primary: 'bg-primary text-black hover:bg-accent-salmon',
     secondary: 'bg-secondary text-black hover:bg-accent-mint',
     yellow: 'bg-accent-yellow text-black',
     outline: 'bg-white text-black hover:bg-gray-100',

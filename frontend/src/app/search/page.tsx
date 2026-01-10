@@ -61,7 +61,7 @@ function SearchContent() {
         <div className="mb-8">
           <h2 className="font-heading text-2xl font-bold mb-4 flex items-center gap-2">
             หุ้น
-            <span className="bg-primary text-white text-sm px-2 py-1 border-2 border-black">
+            <span className="bg-primary text-black text-sm px-2 py-1 border-2 border-black">
               {stocks.length}
             </span>
           </h2>

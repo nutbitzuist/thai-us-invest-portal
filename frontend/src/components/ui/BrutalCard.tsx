@@ -11,7 +11,7 @@ interface BrutalCardProps {
 export default function BrutalCard({ children, className = '', href, color = 'white' }: BrutalCardProps) {
   const colorClasses = {
     white: 'bg-white',
-    primary: 'bg-primary text-white',
+    primary: 'bg-primary text-black',
     secondary: 'bg-secondary',
     yellow: 'bg-accent-yellow',
     mint: 'bg-accent-mint',

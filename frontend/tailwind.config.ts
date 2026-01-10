@@ -33,7 +33,8 @@ export default {
         sideways: "#FFBB33",
       },
       fontFamily: {
-        heading: ["Space Grotesk", "sans-serif"],
+        sans: ["IBM Plex Sans Thai", "sans-serif"],
+        heading: ["IBM Plex Sans Thai", "sans-serif"],
         thai: ["IBM Plex Sans Thai", "sans-serif"],
       },
       boxShadow: {

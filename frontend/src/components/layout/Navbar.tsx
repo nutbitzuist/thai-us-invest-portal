@@ -14,7 +14,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-primary border-3 border-black flex items-center justify-center">
-              <span className="text-white font-bold text-lg">US</span>
+              <span className="text-black font-bold text-lg">US</span>
             </div>
             <span className="font-heading font-bold text-lg hidden sm:block">
               Thai US Invest
@@ -77,7 +77,7 @@ export default function Navbar() {
               </Link>
               <Link 
                 href="/etf" 
-                className="py-2 px-4 bg-primary border-3 border-black font-thai font-medium text-white"
+                className="py-2 px-4 bg-primary border-3 border-black font-thai font-medium text-black"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 ETF ยอดนิยม
