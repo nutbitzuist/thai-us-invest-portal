@@ -4,11 +4,12 @@ import { useEffect, useRef } from 'react';
 
 interface TradingViewChartProps {
   symbol: string;
+  exchange?: string;
   theme?: 'light' | 'dark';
   height?: number;
 }
 
-export default function TradingViewChart({ symbol, theme = 'light', height = 400 }: TradingViewChartProps) {
+export default function TradingViewChart({ symbol, exchange, theme = 'light', height = 400 }: TradingViewChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,6 +24,9 @@ export default function TradingViewChart({ symbol, theme = 'light', height = 400
     widgetContainer.style.height = `${height}px`;
     containerRef.current.appendChild(widgetContainer);
 
+    // Format symbol (e.g. NASDAQ:AAPL) if exchange provided
+    const chartSymbol = exchange ? `${exchange}:${symbol}` : symbol;
+
     // Create script
     const script = document.createElement('script');
     script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
@@ -30,7 +34,7 @@ export default function TradingViewChart({ symbol, theme = 'light', height = 400
     script.async = true;
     script.innerHTML = JSON.stringify({
       autosize: true,
-      symbol: symbol,
+      symbol: chartSymbol,
       interval: 'D',
       timezone: 'Asia/Bangkok',
       theme: theme,
@@ -42,14 +46,15 @@ export default function TradingViewChart({ symbol, theme = 'light', height = 400
       support_host: 'https://www.tradingview.com',
     });
 
-    containerRef.current.appendChild(script);
+    const currentContainer = containerRef.current;
+    currentContainer.appendChild(script);
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+      if (currentContainer) {
+        currentContainer.innerHTML = '';
       }
     };
-  }, [symbol, theme, height]);
+  }, [symbol, exchange, theme, height]);
 
   return (
     <div className="border-3 border-black bg-white overflow-hidden">

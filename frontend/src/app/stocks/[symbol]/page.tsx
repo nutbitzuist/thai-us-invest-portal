@@ -97,7 +97,7 @@ export default function StockDetailPage() {
 
       {/* TradingView Chart */}
       <div className="mb-6">
-        <TradingViewChart symbol={symbol} height={500} />
+        <TradingViewChart symbol={symbol} exchange={stock?.exchange} height={500} />
       </div>
 
       {/* Metrics Grid */}
