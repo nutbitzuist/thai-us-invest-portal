@@ -8,17 +8,17 @@ import TrendBadge from '@/components/ui/TrendBadge';
 import StockCard from '@/components/features/StockCard';
 
 const SECTORS = [
-  'Technology',
-  'Healthcare',
-  'Financial Services',
-  'Consumer Cyclical',
-  'Consumer Defensive',
-  'Energy',
-  'Utilities',
-  'Real Estate',
   'Communication Services',
+  'Consumer Discretionary',
+  'Consumer Staples',
+  'Energy',
+  'Financials',
+  'Health Care',
   'Industrials',
-  'Basic Materials'
+  'Information Technology',
+  'Materials',
+  'Real Estate',
+  'Utilities'
 ];
 
 export default function SP500Page() {
