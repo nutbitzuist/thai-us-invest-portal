@@ -57,6 +57,96 @@ async def sync_prices(
     }
 
 
+
+@router.post("/migrate_schema")
+async def migrate_schema(
+    x_admin_key: str = Header(None, alias="X-Admin-Key"),
+    db: AsyncSession = Depends(get_db)
+):
+    """Run schema migration to add profile columns."""
+    settings = get_settings()
+    if x_admin_key != settings.admin_api_key:
+        raise HTTPException(status_code=403, detail="Invalid admin key")
+    
+    from sqlalchemy import text
+    
+    # Add columns if they don't exist
+    columns = [
+        "ALTER TABLE stocks ADD COLUMN IF NOT EXISTS ceo VARCHAR(255)",
+        "ALTER TABLE stocks ADD COLUMN IF NOT EXISTS employees INTEGER",
+        "ALTER TABLE stocks ADD COLUMN IF NOT EXISTS headquarters VARCHAR(255)",
+        "ALTER TABLE stocks ADD COLUMN IF NOT EXISTS founded_year INTEGER",
+        "ALTER TABLE stocks ADD COLUMN IF NOT EXISTS analysis_data TEXT",
+    ]
+    
+    try:
+        for col_sql in columns:
+            await db.execute(text(col_sql))
+        await db.commit()
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+        
+    return {"message": "Schema migration completed"}
+
+
+@router.post("/sync_profile")
+async def sync_profile(
+    background_tasks: BackgroundTasks,
+    x_admin_key: str = Header(None, alias="X-Admin-Key"),
+    db: AsyncSession = Depends(get_db)
+):
+    """Sync detailed profile data from Yahoo Finance."""
+    settings = get_settings()
+    if x_admin_key != settings.admin_api_key:
+        raise HTTPException(status_code=403, detail="Invalid admin key")
+    
+    background_tasks.add_task(run_profile_sync, db)
+    return {"message": "Profile sync started"}
+
+
+async def run_profile_sync(db: AsyncSession):
+    """Background task to sync profiles."""
+    try:
+        from sqlalchemy import select
+        from app.models import Stock
+        from app.services.yahoo_finance import get_yahoo_service
+        import asyncio
+        
+        yahoo = get_yahoo_service()
+        stocks = (await db.execute(select(Stock))).scalars().all()
+        
+        print(f"Starting profile sync for {len(stocks)} stocks...")
+        
+        for i, stock in enumerate(stocks):
+            try:
+                info = await yahoo.get_stock_info(stock.symbol)
+                if info:
+                    stock.ceo = info.get('ceo')
+                    stock.employees = info.get('employees')
+                    stock.headquarters = info.get('headquarters')
+                    stock.description = info.get('description') # Update description too
+                    # stock.website already exists
+                    stock.website = info.get('website')
+                    
+                if i % 10 == 0:
+                    await db.commit()
+                    print(f"Synced {i}/{len(stocks)}")
+                
+                # Rate limit manual
+                await asyncio.sleep(0.5)
+                
+            except Exception as e:
+                print(f"Error syncing {stock.symbol}: {e}")
+                continue
+                
+        await db.commit()
+        print("Profile sync completed")
+        
+    except Exception as e:
+        print(f"Profile sync failed: {e}")
+
+
 async def run_price_sync(db: AsyncSession):
     """Background task to sync prices."""
     try:
@@ -101,17 +191,23 @@ async def run_price_sync(db: AsyncSession):
                     
                     # Update fields
                     quote_obj.price = data.get("price")
-                    quote_obj.change_amount = data.get("change")
+                    quote_obj.change_amount = data.get("change_amount") # Fix: yahoo returns keys like 'change_amount' or 'change'?
+                    # Check yahoo_finance.py get_quote: 'change_amount': round(change, 4)
+                    # batch_get_quotes returns result of get_quote.
+                    # Keys: price, change_amount, change_percent...
+                    # Previous code used data.get("change") which might be wrong if key is 'change_amount'.
+                    # I will fix keys here too.
+                    quote_obj.change_amount = data.get("change_amount")
                     quote_obj.change_percent = data.get("change_percent")
-                    quote_obj.open_price = data.get("open")
-                    quote_obj.high_price = data.get("day_high")
-                    quote_obj.low_price = data.get("day_low")
+                    quote_obj.open_price = data.get("open_price")
+                    quote_obj.high_price = data.get("high_price")
+                    quote_obj.low_price = data.get("low_price")
                     quote_obj.volume = data.get("volume")
                     quote_obj.market_cap = data.get("market_cap")
                     quote_obj.pe_ratio = data.get("pe_ratio")
-                    quote_obj.week_52_high = data.get("fifty_two_week_high")
-                    quote_obj.week_52_low = data.get("fifty_two_week_low")
-                    quote_obj.trend = data.get("trend") # calculated by service
+                    quote_obj.week_52_high = data.get("week_52_high")
+                    quote_obj.week_52_low = data.get("week_52_low")
+                    quote_obj.trend = data.get("trend") 
                     
                 await db.commit()
                 

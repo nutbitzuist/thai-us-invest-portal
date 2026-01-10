@@ -32,6 +32,11 @@ class Stock(Base):
     description_th: Mapped[Optional[str]] = mapped_column(Text)
     logo_url: Mapped[Optional[str]] = mapped_column(String(500))
     website: Mapped[Optional[str]] = mapped_column(String(500))
+    ceo: Mapped[Optional[str]] = mapped_column(String(255))
+    employees: Mapped[Optional[int]] = mapped_column()
+    headquarters: Mapped[Optional[str]] = mapped_column(String(255))
+    founded_year: Mapped[Optional[int]] = mapped_column()
+    analysis_data: Mapped[Optional[str]] = mapped_column(Text)  # JSON string
     country: Mapped[str] = mapped_column(String(50), default="USA")
     exchange: Mapped[Optional[str]] = mapped_column(String(20))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)

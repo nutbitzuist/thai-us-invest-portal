@@ -107,6 +107,28 @@ async def get_stock(
         db.add(stock)
         await db.commit()
         await db.refresh(stock)
+        
+    # Lazy load profile data if missing
+    if not stock.ceo or not stock.employees:
+        try:
+            yf_service = get_yahoo_service()
+            info = await yf_service.get_stock_info(symbol)
+            if info:
+                stock.ceo = info.get('ceo')
+                stock.employees = info.get('employees')
+                stock.headquarters = info.get('headquarters')
+                stock.founded_year = info.get('founded_year') # Note: yahoo service returns this? I commented it out in yahoo_finance.py
+                # Re-check yahoo_finance.py return dict in step 976. I commented out founded.
+                # So founded won't update.
+                if not stock.website:
+                    stock.website = info.get('website')
+                
+                db.add(stock)
+                await db.commit()
+                await db.refresh(stock)
+        except Exception as e:
+            # Don't fail request if update fails
+            pass
     
     data = {
         "symbol": stock.symbol,
@@ -118,6 +140,10 @@ async def get_stock(
         "description_th": stock.description_th,
         "logo_url": stock.logo_url or f"https://logo.clearbit.com/{stock.website.replace('https://', '').replace('http://', '').split('/')[0]}" if stock.website else None,
         "website": stock.website,
+        "ceo": stock.ceo,
+        "employees": stock.employees,
+        "headquarters": stock.headquarters,
+        "founded_year": stock.founded_year,
         "exchange": stock.exchange,
         "country": stock.country,
     }

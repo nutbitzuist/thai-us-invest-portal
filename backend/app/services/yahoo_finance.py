@@ -116,6 +116,25 @@ class YahooFinanceService:
             if not info:
                 return None
             
+            # Extract CEO
+            ceo = None
+            officers = info.get('companyOfficers', [])
+            if officers:
+                for o in officers:
+                    if 'CEO' in o.get('title', '').upper():
+                        ceo = o.get('name')
+                        break
+            
+            # Construct HQ Address
+            city = info.get('city', '')
+            state = info.get('state', '')
+            country = info.get('country', '')
+            hq_parts = [p for p in [city, state, country] if p]
+            headquarters = ", ".join(hq_parts) if hq_parts else None
+
+            # Financial Ratios for Analysis (subset handled here, rest in LatestQuote)
+            # We can return them for immediate storage
+            
             return {
                 'symbol': symbol.upper(),
                 'name': info.get('longName') or info.get('shortName', ''),
@@ -125,6 +144,10 @@ class YahooFinanceService:
                 'website': info.get('website'),
                 'exchange': info.get('exchange'),
                 'country': info.get('country', 'USA'),
+                'ceo': ceo,
+                'employees': info.get('fullTimeEmployees'),
+                'headquarters': headquarters,
+                # founded? yfinance key varies. Skip for now.
             }
         except Exception as e:
             logger.error(f"Error fetching stock info for {symbol}: {e}")
