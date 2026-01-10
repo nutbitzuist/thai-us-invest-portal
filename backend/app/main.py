@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.database import close_db
-from app.routers import health, indices, stocks, etfs, search, analysis
+from app.routers import health, indices, stocks, etfs, search, analysis, admin
 
 settings = get_settings()
 
@@ -57,6 +57,7 @@ app.include_router(stocks.router, prefix=settings.api_prefix)
 app.include_router(etfs.router, prefix=settings.api_prefix)
 app.include_router(search.router, prefix=settings.api_prefix)
 app.include_router(analysis.router, prefix=settings.api_prefix)
+app.include_router(admin.router, prefix=settings.api_prefix)
 
 
 @app.get("/")
