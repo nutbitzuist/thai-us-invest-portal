@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 
+
 async def seed_indices(db: AsyncSession):
     """Seed indices table."""
     indices = [
@@ -73,112 +74,122 @@ async def seed_top50_etfs(db: AsyncSession):
     logger.info(f"Seeded {count} ETFs")
 
 
-# Sample S&P 500 stocks (top 50 by market cap)
-SP500_TOP50 = [
-    {"symbol": "AAPL", "name": "Apple Inc.", "sector": "Technology"},
-    {"symbol": "MSFT", "name": "Microsoft Corporation", "sector": "Technology"},
-    {"symbol": "GOOGL", "name": "Alphabet Inc.", "sector": "Technology"},
-    {"symbol": "AMZN", "name": "Amazon.com Inc.", "sector": "Consumer Discretionary"},
-    {"symbol": "NVDA", "name": "NVIDIA Corporation", "sector": "Technology"},
-    {"symbol": "META", "name": "Meta Platforms Inc.", "sector": "Technology"},
-    {"symbol": "TSLA", "name": "Tesla Inc.", "sector": "Consumer Discretionary"},
-    {"symbol": "BRK.B", "name": "Berkshire Hathaway Inc.", "sector": "Financials"},
-    {"symbol": "UNH", "name": "UnitedHealth Group Inc.", "sector": "Healthcare"},
-    {"symbol": "JNJ", "name": "Johnson & Johnson", "sector": "Healthcare"},
-    {"symbol": "V", "name": "Visa Inc.", "sector": "Financials"},
-    {"symbol": "XOM", "name": "Exxon Mobil Corporation", "sector": "Energy"},
-    {"symbol": "JPM", "name": "JPMorgan Chase & Co.", "sector": "Financials"},
-    {"symbol": "WMT", "name": "Walmart Inc.", "sector": "Consumer Staples"},
-    {"symbol": "PG", "name": "Procter & Gamble Co.", "sector": "Consumer Staples"},
-    {"symbol": "MA", "name": "Mastercard Inc.", "sector": "Financials"},
-    {"symbol": "HD", "name": "Home Depot Inc.", "sector": "Consumer Discretionary"},
-    {"symbol": "CVX", "name": "Chevron Corporation", "sector": "Energy"},
-    {"symbol": "LLY", "name": "Eli Lilly and Company", "sector": "Healthcare"},
-    {"symbol": "ABBV", "name": "AbbVie Inc.", "sector": "Healthcare"},
-    {"symbol": "MRK", "name": "Merck & Co. Inc.", "sector": "Healthcare"},
-    {"symbol": "PFE", "name": "Pfizer Inc.", "sector": "Healthcare"},
-    {"symbol": "AVGO", "name": "Broadcom Inc.", "sector": "Technology"},
-    {"symbol": "KO", "name": "Coca-Cola Company", "sector": "Consumer Staples"},
-    {"symbol": "PEP", "name": "PepsiCo Inc.", "sector": "Consumer Staples"},
-    {"symbol": "COST", "name": "Costco Wholesale Corporation", "sector": "Consumer Staples"},
-    {"symbol": "TMO", "name": "Thermo Fisher Scientific Inc.", "sector": "Healthcare"},
-    {"symbol": "BAC", "name": "Bank of America Corp.", "sector": "Financials"},
-    {"symbol": "CSCO", "name": "Cisco Systems Inc.", "sector": "Technology"},
-    {"symbol": "MCD", "name": "McDonald's Corporation", "sector": "Consumer Discretionary"},
-    {"symbol": "ABT", "name": "Abbott Laboratories", "sector": "Healthcare"},
-    {"symbol": "ACN", "name": "Accenture plc", "sector": "Technology"},
-    {"symbol": "CRM", "name": "Salesforce Inc.", "sector": "Technology"},
-    {"symbol": "DHR", "name": "Danaher Corporation", "sector": "Healthcare"},
-    {"symbol": "ORCL", "name": "Oracle Corporation", "sector": "Technology"},
-    {"symbol": "NKE", "name": "Nike Inc.", "sector": "Consumer Discretionary"},
-    {"symbol": "AMD", "name": "Advanced Micro Devices Inc.", "sector": "Technology"},
-    {"symbol": "ADBE", "name": "Adobe Inc.", "sector": "Technology"},
-    {"symbol": "NFLX", "name": "Netflix Inc.", "sector": "Communication Services"},
-    {"symbol": "INTC", "name": "Intel Corporation", "sector": "Technology"},
-    {"symbol": "DIS", "name": "Walt Disney Company", "sector": "Communication Services"},
-    {"symbol": "VZ", "name": "Verizon Communications Inc.", "sector": "Communication Services"},
-    {"symbol": "T", "name": "AT&T Inc.", "sector": "Communication Services"},
-    {"symbol": "CMCSA", "name": "Comcast Corporation", "sector": "Communication Services"},
-    {"symbol": "QCOM", "name": "QUALCOMM Inc.", "sector": "Technology"},
-    {"symbol": "TXN", "name": "Texas Instruments Inc.", "sector": "Technology"},
-    {"symbol": "PM", "name": "Philip Morris International", "sector": "Consumer Staples"},
-    {"symbol": "NEE", "name": "NextEra Energy Inc.", "sector": "Utilities"},
-    {"symbol": "HON", "name": "Honeywell International Inc.", "sector": "Industrials"},
-    {"symbol": "IBM", "name": "International Business Machines", "sector": "Technology"},
-]
+async def seed_all_stocks(db: AsyncSession):
+    """Seed all stocks from S&P 500 and Nasdaq 100 lists."""
+    stocks_to_add = {}  # symbol -> dict
+    
+    # 1. Load S&P 500
+    sp500_file = DATA_DIR / "sp500_tickers.json"
+    if sp500_file.exists():
+        with open(sp500_file) as f:
+            data = json.load(f)
+            # Structure: { "sectors": [ { "companies": [ ... ] } ] }
+            for sector_data in data.get("sectors", []):
+                sector_name = sector_data.get("sector")
+                for comp in sector_data.get("companies", []):
+                    # "ticker": "NVDA", "name": "Nvidia", "weight":...
+                    sym = comp.get("ticker")
+                    if sym:
+                        stocks_to_add[sym] = {
+                            "symbol": sym,
+                            "name": comp.get("name"),
+                            "sector": sector_name
+                        }
+    else:
+        logger.warning(f"S&P 500 file missing: {sp500_file}")
 
+    # 2. Load Nasdaq 100
+    ndx_file = DATA_DIR / "nasdaq100_tickers.json"
+    if ndx_file.exists():
+        with open(ndx_file) as f:
+            data = json.load(f)
+            # Structure: [ { "Ticker": "ADBE", "Company": "Adobe", "GICS_Sector": ... } ]
+            for comp in data:
+                sym = comp.get("Ticker")
+                if sym:
+                    # Prefer existing data from SP500 if available (often better formatted sector)
+                    if sym not in stocks_to_add:
+                        stocks_to_add[sym] = {
+                            "symbol": sym,
+                            "name": comp.get("Company"),
+                            "sector": comp.get("GICS_Sector")
+                        }
+    else:
+        logger.warning(f"Nasdaq 100 file missing: {ndx_file}")
 
-async def seed_sample_stocks(db: AsyncSession):
-    """Seed sample stocks for S&P 500."""
+    # Insert into DB
     count = 0
-    for item in SP500_TOP50:
+    for sym, stock_data in stocks_to_add.items():
         existing = await db.execute(
-            select(Stock).where(Stock.symbol == item["symbol"])
+            select(Stock).where(Stock.symbol == sym)
         )
         if not existing.scalar_one_or_none():
             db.add(Stock(
-                symbol=item["symbol"],
-                name=item["name"],
-                sector=item.get("sector"),
+                symbol=stock_data["symbol"],
+                name=stock_data["name"],
+                sector=stock_data.get("sector"),
             ))
             count += 1
     
     await db.commit()
-    logger.info(f"Seeded {count} sample stocks")
+    logger.info(f"Seeded {count} new stocks (Total {len(stocks_to_add)} processed)")
 
 
 async def seed_index_components(db: AsyncSession):
     """Add stocks to index components."""
-    # Add all sample stocks to SPX (S&P 500)
-    for i, item in enumerate(SP500_TOP50):
-        existing = await db.execute(
-            select(IndexComponent).where(
-                IndexComponent.index_symbol == "SPX",
-                IndexComponent.stock_symbol == item["symbol"]
-            )
-        )
-        if not existing.scalar_one_or_none():
-            db.add(IndexComponent(
-                index_symbol="SPX",
-                stock_symbol=item["symbol"],
-                weight=round((50 - i) / 500 * 100, 4),  # Simulated weight
-            ))
-    
-    # Add top tech stocks to NDX (Nasdaq 100)
-    tech_stocks = [s for s in SP500_TOP50 if s["sector"] == "Technology"][:30]
-    for i, item in enumerate(tech_stocks):
-        existing = await db.execute(
-            select(IndexComponent).where(
-                IndexComponent.index_symbol == "NDX",
-                IndexComponent.stock_symbol == item["symbol"]
-            )
-        )
-        if not existing.scalar_one_or_none():
-            db.add(IndexComponent(
-                index_symbol="NDX",
-                stock_symbol=item["symbol"],
-                weight=round((30 - i) / 100 * 100, 4),
-            ))
+    # 1. S&P 500 Components
+    sp500_file = DATA_DIR / "sp500_tickers.json"
+    if sp500_file.exists():
+        with open(sp500_file) as f:
+            data = json.load(f)
+            for sector_data in data.get("sectors", []):
+                for comp in sector_data.get("companies", []):
+                    sym = comp.get("ticker")
+                    weight = comp.get("weight")
+                    if sym:
+                        # Ensure weight handles percentage string "7.18" -> 7.18
+                        try:
+                            w_val = float(weight) if weight else 0.0
+                        except ValueError:
+                            w_val = 0.0
+                            
+                        existing = await db.execute(
+                            select(IndexComponent).where(
+                                IndexComponent.index_symbol == "SPX",
+                                IndexComponent.stock_symbol == sym
+                            )
+                        )
+                        if not existing.scalar_one_or_none():
+                            db.add(IndexComponent(
+                                index_symbol="SPX",
+                                stock_symbol=sym,
+                                weight=w_val
+                            ))
+
+    # 2. Nasdaq 100 Components
+    ndx_file = DATA_DIR / "nasdaq100_tickers.json"
+    if ndx_file.exists():
+        with open(ndx_file) as f:
+            data = json.load(f)
+            # Calculate mock weights if not provided, or just add them
+            # Nasdaq 100 is market-cap weighted but we might not have it in this JSON
+            # We'll just add them.
+            total_count = len(data)
+            for i, comp in enumerate(data):
+                sym = comp.get("Ticker")
+                if sym:
+                    existing = await db.execute(
+                        select(IndexComponent).where(
+                            IndexComponent.index_symbol == "NDX",
+                            IndexComponent.stock_symbol == sym
+                        )
+                    )
+                    if not existing.scalar_one_or_none():
+                        db.add(IndexComponent(
+                            index_symbol="NDX",
+                            stock_symbol=sym,
+                            weight=0.0 # Placeholder or calculate if market cap available
+                        ))
     
     await db.commit()
     logger.info("Seeded index components")
@@ -188,6 +199,7 @@ async def run_all_seeds(db: AsyncSession):
     """Run all seed functions."""
     await seed_indices(db)
     await seed_top50_etfs(db)
-    await seed_sample_stocks(db)
+    await seed_all_stocks(db)
     await seed_index_components(db)
     logger.info("All seeds completed")
+
