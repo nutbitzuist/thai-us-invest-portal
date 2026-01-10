@@ -24,7 +24,7 @@ export default {
         // Neutrals
         background: "#FFF8E7",
         surface: "#FFFFFF",
-        "text-primary": "#2D3436",
+        "text-primary": "#000000",
         border: "#000000",
         
         // Trend Colors

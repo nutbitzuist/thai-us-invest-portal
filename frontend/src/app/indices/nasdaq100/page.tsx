@@ -50,7 +50,7 @@ export default function Nasdaq100Page() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
-      <div className="border-3 border-black bg-secondary p-6 mb-8 shadow-brutal">
+      <div className="border-3 border-black bg-secondary text-black p-6 mb-8 shadow-brutal">
         <h1 className="font-heading text-4xl font-bold">Nasdaq 100</h1>
         <p className="font-thai text-xl mt-2">{index?.name_th || 'ดัชนี Nasdaq 100'}</p>
         <p className="font-thai mt-4 opacity-90">
