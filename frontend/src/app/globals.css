@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  /* Primary Colors */
+  --color-primary: #ff6b6b;
+  --color-secondary: #4ecdc4;
+
+  /* Accent Colors */
+  --color-accent-yellow: #ffe66d;
+  --color-accent-mint: #95e1d3;
+  --color-accent-salmon: #f38181;
+  --color-accent-purple: #dda0dd;
+
+  /* Neutrals */
+  --color-background: #fff8e7;
+  --color-surface: #ffffff;
+  --color-text: #2d3436;
+  --color-border: #000000;
+
+  /* Trend Colors */
+  --color-uptrend: #00c851;
+  --color-downtrend: #ff4444;
+  --color-sideways: #ffbb33;
+}
+
+body {
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* Neo-Brutalism Component Styles */
+.brutal-card {
+  background: white;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  padding: 1.5rem;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.brutal-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+}
+
+.brutal-button {
+  background: var(--color-primary);
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.brutal-button:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000;
+}
+
+.brutal-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000;
+}
+
+.brutal-button-secondary {
+  background: var(--color-secondary);
+}
+
+.brutal-button-yellow {
+  background: var(--color-accent-yellow);
+  color: #000;
+}
+
+.brutal-input {
+  border: 3px solid #000;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.1s;
+}
+
+.brutal-input:focus {
+  box-shadow: 4px 4px 0px #000;
+}
+
+.trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid #000;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.trend-badge.uptrend {
+  background: var(--color-uptrend);
+  color: white;
+}
+
+.trend-badge.downtrend {
+  background: var(--color-downtrend);
+  color: white;
+}
+
+.trend-badge.sideways {
+  background: var(--color-sideways);
+  color: black;
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
