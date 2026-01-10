@@ -5,12 +5,29 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchIndexComponents, fetchIndex } from '@/lib/api';
 import Link from 'next/link';
 import TrendBadge from '@/components/ui/TrendBadge';
+import StockCard from '@/components/features/StockCard';
+
+const SECTORS = [
+  'Technology',
+  'Healthcare',
+  'Financial Services',
+  'Consumer Cyclical',
+  'Consumer Defensive',
+  'Energy',
+  'Utilities',
+  'Real Estate',
+  'Communication Services',
+  'Industrials',
+  'Basic Materials'
+];
 
 export default function Nasdaq100Page() {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('weight');
   const [order, setOrder] = useState('desc');
-  const [perPage, setPerPage] = useState(50);
+  const [perPage] = useState(50);
+  const [sector, setSector] = useState('');
+  const [view, setView] = useState<'list' | 'card'>('list');
 
   const { data: indexData } = useQuery({
     queryKey: ['index', 'NDX'],
@@ -18,8 +35,8 @@ export default function Nasdaq100Page() {
   });
 
   const { data: componentsData, isLoading } = useQuery({
-    queryKey: ['indexComponents', 'NDX', page, sort, order, perPage],
-    queryFn: () => fetchIndexComponents('NDX', page, perPage, undefined, sort, order),
+    queryKey: ['indexComponents', 'NDX', page, sort, order, perPage, sector],
+    queryFn: () => fetchIndexComponents('NDX', page, perPage, sector || undefined, sort, order),
   });
 
   const index = indexData?.data;
@@ -47,6 +64,11 @@ export default function Nasdaq100Page() {
     setPage(1); // Reset to page 1 on sort change
   };
 
+  const handleSectorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSector(e.target.value);
+    setPage(1);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Header */}
@@ -59,40 +81,74 @@ export default function Nasdaq100Page() {
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <div className="flex items-center gap-4">
-          <label className="font-heading font-bold">Sort By:</label>
-          <select 
-            className="border-2 border-black p-2 font-thai bg-white shadow-brutal-sm"
-            onChange={handleSortChange}
-            defaultValue="weight_desc"
-          >
-            <option value="weight_desc">Market Cap (High-Low)</option>
-            <option value="name_asc">Alphabet (A-Z)</option>
-            <option value="change_desc">Price Change (Best)</option>
-            <option value="change_asc">Price Change (Worst)</option>
-            <option value="trend_desc">Trend</option>
-          </select>
+      <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-6 gap-4 border-3 border-black p-4 bg-white shadow-brutal-sm">
+        <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+          {/* SORT */}
+          <div className="flex flex-col gap-1">
+            <label className="font-heading font-bold text-xs uppercase">Sort By</label>
+            <select 
+              className="border-2 border-black p-2 font-thai bg-white min-w-[180px]"
+              onChange={handleSortChange}
+              defaultValue="weight_desc"
+            >
+              <option value="weight_desc">Market Cap (High-Low)</option>
+              <option value="name_asc">Alphabet (A-Z)</option>
+              <option value="change_desc">Price Change (Best)</option>
+              <option value="change_asc">Price Change (Worst)</option>
+              <option value="trend_desc">Trend</option>
+            </select>
+          </div>
+
+          {/* SECTOR */}
+          <div className="flex flex-col gap-1">
+            <label className="font-heading font-bold text-xs uppercase">Sector</label>
+            <select 
+              className="border-2 border-black p-2 font-thai bg-white min-w-[180px]"
+              onChange={handleSectorChange}
+              value={sector}
+            >
+              <option value="">All Sectors</option>
+              {SECTORS.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 justify-between w-full md:w-auto">
+            <div className="flex items-center gap-2">
+                <button 
+                    onClick={() => setView('list')}
+                    className={`px-3 py-1 border-2 border-black font-bold text-sm ${view === 'list' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
+                >
+                    LIST
+                </button>
+                <button 
+                    onClick={() => setView('card')}
+                    className={`px-3 py-1 border-2 border-black font-bold text-sm ${view === 'card' ? 'bg-black text-white' : 'bg-white hover:bg-gray-100'}`}
+                >
+                    CARD
+                </button>
+            </div>
+            
             <span className="font-thai text-sm bg-gray-100 px-3 py-1 border border-black">
-                Total: {componentsData?.meta?.total || 0} Stocks
+                Total: {componentsData?.meta?.total || 0}
             </span>
         </div>
       </div>
 
-      {/* Stock Table */}
-      <div className="border-3 border-black bg-white overflow-x-auto min-h-[500px]">
+      {/* Content */}
+      {view === 'list' ? (
+        <div className="border-3 border-black bg-white overflow-x-auto min-h-[500px]">
         <table className="w-full">
           <thead className="bg-accent-mint border-b-3 border-black">
             <tr>
-              <th className="text-left p-4 font-heading">หุ้น</th>
-              <th className="text-left p-4 font-heading">ชื่อบริษัท</th>
-              <th className="text-left p-4 font-heading">กลุ่ม</th>
-              <th className="text-right p-4 font-heading">ราคา</th>
-              <th className="text-right p-4 font-heading">เปลี่ยนแปลง</th>
-              <th className="text-center p-4 font-heading">เทรนด์</th>
+              <th className="text-left p-4 font-heading text-black">หุ้น</th>
+              <th className="text-left p-4 font-heading text-black">ชื่อบริษัท</th>
+              <th className="text-left p-4 font-heading text-black">กลุ่ม</th>
+              <th className="text-right p-4 font-heading text-black">ราคา</th>
+              <th className="text-right p-4 font-heading text-black">เปลี่ยนแปลง</th>
+              <th className="text-center p-4 font-heading text-black">เทรนด์</th>
             </tr>
           </thead>
           <tbody>
@@ -158,14 +214,31 @@ export default function Nasdaq100Page() {
           </tbody>
         </table>
       </div>
-      
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[500px]">
+          {isLoading ? (
+            [...Array(6)].map((_, i) => (
+                <div key={i} className="animate-pulse bg-gray-200 h-48 border-3 border-black"></div>
+            ))
+          ) : components.length === 0 ? (
+             <div className="col-span-full text-center p-8 font-thai text-gray-500 border-3 border-black bg-white">
+                ไม่พบข้อมูล
+             </div>
+          ) : (
+            components.map((stock: any) => (
+                <StockCard key={stock.symbol} stock={stock} />
+            ))
+          )}
+        </div>
+      )}
+
       {/* Pagination */}
       {componentsData?.meta && componentsData.meta.total_pages > 1 && (
         <div className="mt-8 flex justify-center gap-4 items-center">
           <button 
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="px-4 py-2 border-2 border-black font-heading font-bold disabled:opacity-50 hover:bg-black hover:text-white transition-colors"
+            className="px-4 py-2 border-2 border-black font-heading font-bold disabled:opacity-50 hover:bg-black hover:text-white transition-colors bg-white"
           >
             PREV
           </button>
@@ -177,7 +250,7 @@ export default function Nasdaq100Page() {
           <button 
             onClick={() => setPage(p => Math.min(componentsData.meta.total_pages, p + 1))}
             disabled={page >= componentsData.meta.total_pages}
-            className="px-4 py-2 border-2 border-black font-heading font-bold disabled:opacity-50 hover:bg-black hover:text-white transition-colors"
+            className="px-4 py-2 border-2 border-black font-heading font-bold disabled:opacity-50 hover:bg-black hover:text-white transition-colors bg-white"
           >
             NEXT
           </button>
