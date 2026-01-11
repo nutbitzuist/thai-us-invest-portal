@@ -2,7 +2,7 @@
     "name": "thai-us-invest-portal-root",
     "private": true,
     "scripts": {
-        "build": "cd frontend && npm install && npm run build"
+        "build": "cd frontend && npm install && npm run build && rm -rf ../.next ../public && mv .next .. && cp -r public .."
     },
     "engines": {
         "node": ">=20.0.0"
