@@ -160,6 +160,71 @@ async def seed_data():
             "author": "Antigravity AI"
         })
 
+    # Import Batch 3
+    from scripts.data.seed_content_batch_3 import (
+        cvx_analysis, mrk_analysis, wfc_analysis, csco_analysis, acn_analysis,
+        mcd_analysis, lin_analysis, abt_analysis, tmo_analysis, nke_analysis,
+        pfe_analysis, dhr_analysis, txn_analysis, pm_analysis, nee_analysis,
+        rtx_analysis, ms_analysis, hon_analysis, unp_analysis, amgn_analysis,
+        intc_analysis, ibm_analysis, qcom_analysis, sbux_analysis, ge_analysis,
+        ba_analysis, cat_analysis, gs_analysis, isrg_analysis, bkng_analysis,
+        now_analysis, spgi_analysis, lmt_analysis, axp_analysis, syk_analysis,
+        blk_analysis, uber_analysis, abnb_analysis, pltr_analysis, arm_analysis
+    )
+
+    batch_3_map = [
+        {"symbol": "CVX", "title_th": "เจาะลึก Chevron (CVX)", "content": cvx_analysis},
+        {"symbol": "MRK", "title_th": "เจาะลึก Merck (MRK)", "content": mrk_analysis},
+        {"symbol": "WFC", "title_th": "เจาะลึก Wells Fargo (WFC)", "content": wfc_analysis},
+        {"symbol": "CSCO", "title_th": "เจาะลึก Cisco (CSCO)", "content": csco_analysis},
+        {"symbol": "ACN", "title_th": "เจาะลึก Accenture (ACN)", "content": acn_analysis},
+        {"symbol": "MCD", "title_th": "เจาะลึก McDonald's (MCD)", "content": mcd_analysis},
+        {"symbol": "LIN", "title_th": "เจาะลึก Linde (LIN)", "content": lin_analysis},
+        {"symbol": "ABT", "title_th": "เจาะลึก Abbott (ABT)", "content": abt_analysis},
+        {"symbol": "TMO", "title_th": "เจาะลึก Thermo Fisher (TMO)", "content": tmo_analysis},
+        {"symbol": "NKE", "title_th": "เจาะลึก Nike (NKE)", "content": nke_analysis},
+        {"symbol": "PFE", "title_th": "เจาะลึก Pfizer (PFE)", "content": pfe_analysis},
+        {"symbol": "DHR", "title_th": "เจาะลึก Danaher (DHR)", "content": dhr_analysis},
+        {"symbol": "TXN", "title_th": "เจาะลึก Texas Instruments (TXN)", "content": txn_analysis},
+        {"symbol": "PM", "title_th": "เจาะลึก Philip Morris (PM)", "content": pm_analysis},
+        {"symbol": "NEE", "title_th": "เจาะลึก NextEra Energy (NEE)", "content": nee_analysis},
+        {"symbol": "RTX", "title_th": "เจาะลึก RTX Corp (RTX)", "content": rtx_analysis},
+        {"symbol": "MS", "title_th": "เจาะลึก Morgan Stanley (MS)", "content": ms_analysis},
+        {"symbol": "HON", "title_th": "เจาะลึก Honeywell (HON)", "content": hon_analysis},
+        {"symbol": "UNP", "title_th": "เจาะลึก Union Pacific (UNP)", "content": unp_analysis},
+        {"symbol": "AMGN", "title_th": "เจาะลึก Amgen (AMGN)", "content": amgn_analysis},
+        {"symbol": "INTC", "title_th": "เจาะลึก Intel (INTC)", "content": intc_analysis},
+        {"symbol": "IBM", "title_th": "เจาะลึก IBM", "content": ibm_analysis},
+        {"symbol": "QCOM", "title_th": "เจาะลึก Qualcomm (QCOM)", "content": qcom_analysis},
+        {"symbol": "SBUX", "title_th": "เจาะลึก Starbucks (SBUX)", "content": sbux_analysis},
+        {"symbol": "GE", "title_th": "เจาะลึก GE Aerospace (GE)", "content": ge_analysis},
+        {"symbol": "BA", "title_th": "เจาะลึก Boeing (BA)", "content": ba_analysis},
+        {"symbol": "CAT", "title_th": "เจาะลึก Caterpillar (CAT)", "content": cat_analysis},
+        {"symbol": "GS", "title_th": "เจาะลึก Goldman Sachs (GS)", "content": gs_analysis},
+        {"symbol": "ISRG", "title_th": "เจาะลึก Intuitive Surgical (ISRG)", "content": isrg_analysis},
+        {"symbol": "BKNG", "title_th": "เจาะลึก Booking Holdings (BKNG)", "content": bkng_analysis},
+        {"symbol": "NOW", "title_th": "เจาะลึก ServiceNow (NOW)", "content": now_analysis},
+        {"symbol": "SPGI", "title_th": "เจาะลึก S&P Global (SPGI)", "content": spgi_analysis},
+        {"symbol": "LMT", "title_th": "เจาะลึก Lockheed Martin (LMT)", "content": lmt_analysis},
+        {"symbol": "AXP", "title_th": "เจาะลึก American Express (AXP)", "content": axp_analysis},
+        {"symbol": "SYK", "title_th": "เจาะลึก Stryker (SYK)", "content": syk_analysis},
+        {"symbol": "BLK", "title_th": "เจาะลึก BlackRock (BLK)", "content": blk_analysis},
+        {"symbol": "UBER", "title_th": "เจาะลึก Uber (UBER)", "content": uber_analysis},
+        {"symbol": "ABNB", "title_th": "เจาะลึก Airbnb (ABNB)", "content": abnb_analysis},
+        {"symbol": "PLTR", "title_th": "เจาะลึก Palantir (PLTR)", "content": pltr_analysis},
+        {"symbol": "ARM", "title_th": "เจาะลึก Arm Holdings (ARM)", "content": arm_analysis},
+    ]
+
+    for item in batch_3_map:
+        data_map.append({
+            "symbol": item["symbol"],
+            "type": "stock",
+            "title": f"{item['symbol']} Analysis",
+            "title_th": item["title_th"],
+            "content": item["content"],
+            "author": "Antigravity AI"
+        })
+
     async with session_maker() as session:
         for item in data_map:
             print(f"Processing {item['symbol']}...")
