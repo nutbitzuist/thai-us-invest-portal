@@ -1,0 +1,11 @@
+{
+    "name": "thai-us-invest-portal-root",
+    "private": true,
+    "scripts": {
+        "build": "cd frontend && npm install && npm run build"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "packageManager": "npm@10.8.2"
+}

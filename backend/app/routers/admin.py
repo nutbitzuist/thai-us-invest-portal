@@ -57,6 +57,26 @@ async def sync_prices(
     }
 
 
+@router.post("/seed_analysis")
+async def seed_analysis_data(
+    x_admin_key: str = Header(..., alias="X-Admin-Key"),
+):
+    """
+    Seed stock analysis data manually.
+    """
+    settings = get_settings()
+    if x_admin_key != settings.admin_api_key:
+        raise HTTPException(status_code=403, detail="Invalid admin key")
+    
+    try:
+        # Import here to avoid potential circular/startup issues
+        from scripts.seed_analysis import seed_data
+        await seed_data()
+        return {"success": True, "message": "Analysis data seeded successfully"}
+    except Exception as e:
+        logger.error(f"Error seeding analysis data: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/migrate_schema")
 async def migrate_schema(

@@ -12,7 +12,7 @@ export default {
         // Primary Colors
         primary: "#FF6B6B",
         secondary: "#4ECDC4",
-        
+
         // Accent Colors
         accent: {
           yellow: "#FFE66D",
@@ -20,13 +20,13 @@ export default {
           salmon: "#F38181",
           purple: "#DDA0DD",
         },
-        
+
         // Neutrals
         background: "#FFF8E7",
         surface: "#FFFFFF",
         "text-primary": "#000000",
         border: "#000000",
-        
+
         // Trend Colors
         uptrend: "#00C851",
         downtrend: "#FF4444",
@@ -48,5 +48,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 } satisfies Config;
