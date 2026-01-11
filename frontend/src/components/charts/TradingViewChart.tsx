@@ -29,7 +29,16 @@ export default function TradingViewChart({ symbol, exchange, theme = 'light', he
     containerRef.current.appendChild(widgetContainer);
 
     // Format symbol (e.g. NASDAQ:AAPL) if exchange provided
-    const chartSymbol = exchange ? `${exchange}:${symbol}` : symbol;
+    // For ETFs like SPY/QQQ, TradingView auto-detects correctly without prefix
+    // For stocks, we use common exchange mappings
+    let chartSymbol = symbol;
+    if (exchange) {
+      chartSymbol = `${exchange}:${symbol}`;
+    } else {
+      // Try common US exchanges - TradingView prefers NASDAQ format for tech stocks
+      // and AMEX (ARCX) for ETFs - but auto-detection usually works
+      chartSymbol = symbol.toUpperCase();
+    }
 
     // Create script
     const script = document.createElement('script');
