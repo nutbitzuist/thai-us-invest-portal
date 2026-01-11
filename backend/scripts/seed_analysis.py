@@ -225,6 +225,71 @@ async def seed_data():
             "author": "Antigravity AI"
         })
 
+    # Import Batch 4
+    from scripts.data.seed_content_batch_4 import (
+        amat_analysis, lrcx_analysis, mu_analysis, adi_analysis, t_analysis,
+        vz_analysis, cmcsa_analysis, tmus_analysis, c_analysis, bac_analysis,
+        schw_analysis, low_analysis, tgt_analysis, tjx_analysis, de_analysis,
+        ups_analysis, fdx_analysis, cop_analysis, mo_analysis, gild_analysis,
+        vrtx_analysis, regn_analysis, zts_analysis, cvs_analysis, el_analysis,
+        lulu_analysis, panw_analysis, crwd_analysis, snps_analysis, cdns_analysis,
+        adp_analysis, pypl_analysis, sq_analysis, shop_analysis, se_analysis,
+        baba_analysis, pdd_analysis, tsm_analysis, jd_analysis, nio_analysis
+    )
+
+    batch_4_map = [
+        {"symbol": "AMAT", "title_th": "เจาะลึก Applied Materials (AMAT)", "content": amat_analysis},
+        {"symbol": "LRCX", "title_th": "เจาะลึก Lam Research (LRCX)", "content": lrcx_analysis},
+        {"symbol": "MU", "title_th": "เจาะลึก Micron (MU)", "content": mu_analysis},
+        {"symbol": "ADI", "title_th": "เจาะลึก Analog Devices (ADI)", "content": adi_analysis},
+        {"symbol": "T", "title_th": "เจาะลึก AT&T (T)", "content": t_analysis},
+        {"symbol": "VZ", "title_th": "เจาะลึก Verizon (VZ)", "content": vz_analysis},
+        {"symbol": "CMCSA", "title_th": "เจาะลึก Comcast (CMCSA)", "content": cmcsa_analysis},
+        {"symbol": "TMUS", "title_th": "เจาะลึก T-Mobile US (TMUS)", "content": tmus_analysis},
+        {"symbol": "C", "title_th": "เจาะลึก Citigroup (C)", "content": c_analysis},
+        {"symbol": "BAC", "title_th": "เจาะลึก Bank of America (BAC)", "content": bac_analysis},
+        {"symbol": "SCHW", "title_th": "เจาะลึก Schwab (SCHW)", "content": schw_analysis},
+        {"symbol": "LOW", "title_th": "เจาะลึก Lowe's (LOW)", "content": low_analysis},
+        {"symbol": "TGT", "title_th": "เจาะลึก Target (TGT)", "content": tgt_analysis},
+        {"symbol": "TJX", "title_th": "เจาะลึก TJX (TJX)", "content": tjx_analysis},
+        {"symbol": "DE", "title_th": "เจาะลึก Deere (DE)", "content": de_analysis},
+        {"symbol": "UPS", "title_th": "เจาะลึก UPS", "content": ups_analysis},
+        {"symbol": "FDX", "title_th": "เจาะลึก FedEx (FDX)", "content": fdx_analysis},
+        {"symbol": "COP", "title_th": "เจาะลึก ConocoPhillips (COP)", "content": cop_analysis},
+        {"symbol": "MO", "title_th": "เจาะลึก Altria (MO)", "content": mo_analysis},
+        {"symbol": "GILD", "title_th": "เจาะลึก Gilead (GILD)", "content": gild_analysis},
+        {"symbol": "VRTX", "title_th": "เจาะลึก Vertex (VRTX)", "content": vrtx_analysis},
+        {"symbol": "REGN", "title_th": "เจาะลึก Regeneron (REGN)", "content": regn_analysis},
+        {"symbol": "ZTS", "title_th": "เจาะลึก Zoetis (ZTS)", "content": zts_analysis},
+        {"symbol": "CVS", "title_th": "เจาะลึก CVS Health (CVS)", "content": cvs_analysis},
+        {"symbol": "EL", "title_th": "เจาะลึก Estee Lauder (EL)", "content": el_analysis},
+        {"symbol": "LULU", "title_th": "เจาะลึก Lululemon (LULU)", "content": lulu_analysis},
+        {"symbol": "PANW", "title_th": "เจาะลึก Palo Alto (PANW)", "content": panw_analysis},
+        {"symbol": "CRWD", "title_th": "เจาะลึก CrowdStrike (CRWD)", "content": crwd_analysis},
+        {"symbol": "SNPS", "title_th": "เจาะลึก Synopsys (SNPS)", "content": snps_analysis},
+        {"symbol": "CDNS", "title_th": "เจาะลึก Cadence (CDNS)", "content": cdns_analysis},
+        {"symbol": "ADP", "title_th": "เจาะลึก ADP", "content": adp_analysis},
+        {"symbol": "PYPL", "title_th": "เจาะลึก PayPal (PYPL)", "content": pypl_analysis},
+        {"symbol": "SQ", "title_th": "เจาะลึก Block (SQ)", "content": sq_analysis},
+        {"symbol": "SHOP", "title_th": "เจาะลึก Shopify (SHOP)", "content": shop_analysis},
+        {"symbol": "SE", "title_th": "เจาะลึก Sea Ltd (SE)", "content": se_analysis},
+        {"symbol": "BABA", "title_th": "เจาะลึก Alibaba (BABA)", "content": baba_analysis},
+        {"symbol": "PDD", "title_th": "เจาะลึก Pinduoduo (PDD)", "content": pdd_analysis},
+        {"symbol": "TSM", "title_th": "เจาะลึก TSMC (TSM)", "content": tsm_analysis},
+        {"symbol": "JD", "title_th": "เจาะลึก JD.com (JD)", "content": jd_analysis},
+        {"symbol": "NIO", "title_th": "เจาะลึก NIO", "content": nio_analysis},
+    ]
+
+    for item in batch_4_map:
+        data_map.append({
+            "symbol": item["symbol"],
+            "type": "stock",
+            "title": f"{item['symbol']} Analysis",
+            "title_th": item["title_th"],
+            "content": item["content"],
+            "author": "Antigravity AI"
+        })
+
     async with session_maker() as session:
         for item in data_map:
             print(f"Processing {item['symbol']}...")
