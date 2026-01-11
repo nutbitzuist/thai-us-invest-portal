@@ -118,6 +118,47 @@ async def seed_data():
             "author": "Antigravity AI"
         }
     ]
+    
+    # Import Batch 2
+    from scripts.data.seed_content_batch_2 import (
+        brk_b_analysis, lly_analysis, avgo_analysis, jpm_analysis, v_analysis,
+        unh_analysis, wmt_analysis, xom_analysis, ma_analysis, pg_analysis,
+        jnj_analysis, hd_analysis, cost_analysis, orcl_analysis, abbv_analysis,
+        ko_analysis, pep_analysis, adbe_analysis, dis_analysis, crm_analysis
+    )
+
+    batch_2_map = [
+        {"symbol": "BRK.B", "title_th": "เจาะลึก Berkshire (BRK.B)", "content": brk_b_analysis},
+        {"symbol": "LLY", "title_th": "เจาะลึก Eli Lilly (LLY)", "content": lly_analysis},
+        {"symbol": "AVGO", "title_th": "เจาะลึก Broadcom (AVGO)", "content": avgo_analysis},
+        {"symbol": "JPM", "title_th": "เจาะลึก JPMorgan (JPM)", "content": jpm_analysis},
+        {"symbol": "V", "title_th": "เจาะลึก Visa (V)", "content": v_analysis},
+        {"symbol": "UNH", "title_th": "เจาะลึก UnitedHealth (UNH)", "content": unh_analysis},
+        {"symbol": "WMT", "title_th": "เจาะลึก Walmart (WMT)", "content": wmt_analysis},
+        {"symbol": "XOM", "title_th": "เจาะลึก Exxon Mobil (XOM)", "content": xom_analysis},
+        {"symbol": "MA", "title_th": "เจาะลึก Mastercard (MA)", "content": ma_analysis},
+        {"symbol": "PG", "title_th": "เจาะลึก P&G (PG)", "content": pg_analysis},
+        {"symbol": "JNJ", "title_th": "เจาะลึก Johnson & Johnson (JNJ)", "content": jnj_analysis},
+        {"symbol": "HD", "title_th": "เจาะลึก Home Depot (HD)", "content": hd_analysis},
+        {"symbol": "COST", "title_th": "เจาะลึก Costco (COST)", "content": cost_analysis},
+        {"symbol": "ORCL", "title_th": "เจาะลึก Oracle (ORCL)", "content": orcl_analysis},
+        {"symbol": "ABBV", "title_th": "เจาะลึก AbbVie (ABBV)", "content": abbv_analysis},
+        {"symbol": "KO", "title_th": "เจาะลึก Coca-Cola (KO)", "content": ko_analysis},
+        {"symbol": "PEP", "title_th": "เจาะลึก PepsiCo (PEP)", "content": pep_analysis},
+        {"symbol": "ADBE", "title_th": "เจาะลึก Adobe (ADBE)", "content": adbe_analysis},
+        {"symbol": "DIS", "title_th": "เจาะลึก Disney (DIS)", "content": dis_analysis},
+        {"symbol": "CRM", "title_th": "เจาะลึก Salesforce (CRM)", "content": crm_analysis},
+    ]
+
+    for item in batch_2_map:
+        data_map.append({
+            "symbol": item["symbol"],
+            "type": "stock",
+            "title": f"{item['symbol']} Analysis",
+            "title_th": item["title_th"],
+            "content": item["content"],
+            "author": "Antigravity AI"
+        })
 
     async with session_maker() as session:
         for item in data_map:
