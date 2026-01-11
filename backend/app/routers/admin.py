@@ -71,8 +71,8 @@ async def seed_analysis_data(
     try:
         # Import here to avoid potential circular/startup issues
         from scripts.seed_analysis import seed_data
-        await seed_data()
-        return {"success": True, "message": "Analysis data seeded successfully"}
+        count = await seed_data()
+        return {"success": True, "message": "Analysis data seeded successfully", "count": count}
     except Exception as e:
         logger.error(f"Error seeding analysis data: {e}")
         raise HTTPException(status_code=500, detail=str(e))

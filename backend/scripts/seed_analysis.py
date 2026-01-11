@@ -15,6 +15,13 @@ from scripts.data.seed_content_aapl import aapl_analysis
 from scripts.data.seed_content_msft import msft_analysis
 from scripts.data.seed_content_nvda import nvda_analysis
 from scripts.data.seed_content_spy import spy_analysis
+from scripts.data.seed_content_googl import googl_analysis
+from scripts.data.seed_content_amzn import amzn_analysis
+from scripts.data.seed_content_meta import meta_analysis
+from scripts.data.seed_content_tsla import tsla_analysis
+from scripts.data.seed_content_amd import amd_analysis
+from scripts.data.seed_content_nflx import nflx_analysis
+from scripts.data.seed_content_qqq import qqq_analysis
 
 async def seed_data():
     print("Starting analysis data seed...")
@@ -52,6 +59,62 @@ async def seed_data():
             "title": "SPY ETF Analysis",
             "title_th": "เจาะลึก SPY ETF: กองทุนดัชนี S&P 500 ที่ดีที่สุด?",
             "content": spy_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "GOOGL",
+            "type": "stock",
+            "title": "Alphabet Inc. Deep Dive Analysis",
+            "title_th": "เจาะลึก Alphabet (GOOGL): เจ้าแห่งการค้นหาและข้อมูลของโลก",
+            "content": googl_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "AMZN",
+            "type": "stock",
+            "title": "Amazon.com Deep Dive Analysis",
+            "title_th": "เจาะลึก Amazon (AMZN): จากร้านหนังสือสู่จักรวรรดิ E-commerce และ Cloud",
+            "content": amzn_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "META",
+            "type": "stock",
+            "title": "Meta Platforms Deep Dive Analysis",
+            "title_th": "เจาะลึก Meta Platforms (META): อาณาจักร Social Media ที่ใหญ่ที่สุด",
+            "content": meta_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "TSLA",
+            "type": "stock",
+            "title": "Tesla Deep Dive Analysis",
+            "title_th": "เจาะลึก Tesla (TSLA): มากกว่าแค่รถยนต์ไฟฟ้า มันคือ AI และหุ่นยนต์",
+            "content": tsla_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "AMD",
+            "type": "stock",
+            "title": "AMD Deep Dive Analysis",
+            "title_th": "เจาะลึก AMD: ผู้ท้าชิงบัลลังก์ชิปเซตที่น่ากลัวที่สุด",
+            "content": amd_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "NFLX",
+            "type": "stock",
+            "title": "Netflix Deep Dive Analysis",
+            "title_th": "เจาะลึก Netflix (NFLX): ราชาแห่งสตรีมมิ่งที่เปลี่ยนพฤติกรรมคนทั้งโลก",
+            "content": nflx_analysis,
+            "author": "Antigravity AI"
+        },
+        {
+            "symbol": "QQQ",
+            "type": "etf",
+            "title": "Invesco QQQ Deep Dive Analysis",
+            "title_th": "เจาะลึก QQQ: กองทุนรวมหุ้นเทคโนโลยีแห่งอนาคต",
+            "content": qqq_analysis,
             "author": "Antigravity AI"
         }
     ]
@@ -91,7 +154,8 @@ async def seed_data():
                 session.add(new_analysis)
         
         await session.commit()
-        print("Data seed completed successfully!")
+        print(f"Data seed completed successfully! ({len(data_map)} items processed)")
+        return len(data_map)
 
 if __name__ == "__main__":
     asyncio.run(seed_data())
