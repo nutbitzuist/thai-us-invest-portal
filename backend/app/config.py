@@ -3,7 +3,7 @@ Application configuration loaded from environment variables.
 """
 import os
 from functools import lru_cache
-from typing import List
+from typing import List, Optional
 
 from pydantic_settings import BaseSettings
 
@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     admin_api_key: str = "dev-secret-key"
 
     # AI
-    openai_api_key: str = None
+    openai_api_key: Optional[str] = None
     
     @property
     def async_database_url(self) -> str:
