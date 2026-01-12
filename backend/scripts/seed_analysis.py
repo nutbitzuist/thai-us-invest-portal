@@ -365,6 +365,81 @@ async def seed_data():
             "author": "Antigravity AI"
         })
 
+    for item in batch_5_map:
+        data_map.append({
+            "symbol": item["symbol"],
+            "type": "stock",
+            "title": f"{item['symbol']} Analysis",
+            "title_th": item["title_th"],
+            "content": item["content"],
+            "author": "Antigravity AI"
+        })
+
+    # Import Batch 6
+    from scripts.data.seed_content_batch_6 import (
+        lvmuy_analysis, hesay_analysis, race_analysis, dal_analysis, ual_analysis,
+        ccl_analysis, rcl_analysis, mar_analysis, hlt_analysis, expe_analysis,
+        lvs_analysis, wynn_analysis, mgm_analysis, hsy_analysis, gis_analysis,
+        khc_analysis, k_analysis, tsn_analysis, cmg_analysis, yum_analysis,
+        dpz_analysis, mrna_analysis, bntx_analysis, azn_analysis, nvs_analysis,
+        sny_analysis, bmy_analysis, fcx_analysis, nem_analysis, gold_analysis,
+        alb_analysis, wbd_analysis, para_analysis, luv_analysis, cl_analysis,
+        kmb_analysis, shw_analysis, d_analysis, so_analysis, cci_analysis
+    )
+
+    batch_6_map = [
+        {"symbol": "LVMUY", "title_th": "เจาะลึก LVMH (LVMUY)", "content": lvmuy_analysis},
+        {"symbol": "HESAY", "title_th": "เจาะลึก Hermes (HESAY)", "content": hesay_analysis},
+        {"symbol": "RACE", "title_th": "เจาะลึก Ferrari (RACE)", "content": race_analysis},
+        {"symbol": "DAL", "title_th": "เจาะลึก Delta Air Lines (DAL)", "content": dal_analysis},
+        {"symbol": "UAL", "title_th": "เจาะลึก United Airlines (UAL)", "content": ual_analysis},
+        {"symbol": "CCL", "title_th": "เจาะลึก Carnival (CCL)", "content": ccl_analysis},
+        {"symbol": "RCL", "title_th": "เจาะลึก Royal Caribbean (RCL)", "content": rcl_analysis},
+        {"symbol": "MAR", "title_th": "เจาะลึก Marriott (MAR)", "content": mar_analysis},
+        {"symbol": "HLT", "title_th": "เจาะลึก Hilton (HLT)", "content": hlt_analysis},
+        {"symbol": "EXPE", "title_th": "เจาะลึก Expedia (EXPE)", "content": expe_analysis},
+        {"symbol": "LVS", "title_th": "เจาะลึก Las Vegas Sands (LVS)", "content": lvs_analysis},
+        {"symbol": "WYNN", "title_th": "เจาะลึก Wynn (WYNN)", "content": wynn_analysis},
+        {"symbol": "MGM", "title_th": "เจาะลึก MGM (MGM)", "content": mgm_analysis},
+        {"symbol": "HSY", "title_th": "เจาะลึก Hershey (HSY)", "content": hsy_analysis},
+        {"symbol": "GIS", "title_th": "เจาะลึก General Mills (GIS)", "content": gis_analysis},
+        {"symbol": "KHC", "title_th": "เจาะลึก Kraft Heinz (KHC)", "content": khc_analysis},
+        {"symbol": "K", "title_th": "เจาะลึก Kellanova (K)", "content": k_analysis},
+        {"symbol": "TSN", "title_th": "เจาะลึก Tyson Foods (TSN)", "content": tsn_analysis},
+        {"symbol": "CMG", "title_th": "เจาะลึก Chipotle (CMG)", "content": cmg_analysis},
+        {"symbol": "YUM", "title_th": "เจาะลึก Yum Brands (YUM)", "content": yum_analysis},
+        {"symbol": "DPZ", "title_th": "เจาะลึก Domino's (DPZ)", "content": dpz_analysis},
+        {"symbol": "MRNA", "title_th": "เจาะลึก Moderna (MRNA)", "content": mrna_analysis},
+        {"symbol": "BNTX", "title_th": "เจาะลึก BioNTech (BNTX)", "content": bntx_analysis},
+        {"symbol": "AZN", "title_th": "เจาะลึก AstraZeneca (AZN)", "content": azn_analysis},
+        {"symbol": "NVS", "title_th": "เจาะลึก Novartis (NVS)", "content": nvs_analysis},
+        {"symbol": "SNY", "title_th": "เจาะลึก Sanofi (SNY)", "content": sny_analysis},
+        {"symbol": "BMY", "title_th": "เจาะลึก BMY", "content": bmy_analysis},
+        {"symbol": "FCX", "title_th": "เจาะลึก Freeport-McMoRan (FCX)", "content": fcx_analysis},
+        {"symbol": "NEM", "title_th": "เจาะลึก Newmont (NEM)", "content": nem_analysis},
+        {"symbol": "GOLD", "title_th": "เจาะลึก Barrick Gold (GOLD)", "content": gold_analysis},
+        {"symbol": "ALB", "title_th": "เจาะลึก Albemarle (ALB)", "content": alb_analysis},
+        {"symbol": "WBD", "title_th": "เจาะลึก Warner Bros (WBD)", "content": wbd_analysis},
+        {"symbol": "PARA", "title_th": "เจาะลึก Paramount (PARA)", "content": para_analysis},
+        {"symbol": "LUV", "title_th": "เจาะลึก Southwest (LUV)", "content": luv_analysis},
+        {"symbol": "CL", "title_th": "เจาะลึก Colgate (CL)", "content": cl_analysis},
+        {"symbol": "KMB", "title_th": "เจาะลึก Kimberly-Clark (KMB)", "content": kmb_analysis},
+        {"symbol": "SHW", "title_th": "เจาะลึก Sherwin-Williams (SHW)", "content": shw_analysis},
+        {"symbol": "D", "title_th": "เจาะลึก Dominion (D)", "content": d_analysis},
+        {"symbol": "SO", "title_th": "เจาะลึก Southern (SO)", "content": so_analysis},
+        {"symbol": "CCI", "title_th": "เจาะลึก Crown Castle (CCI)", "content": cci_analysis},
+    ]
+
+    for item in batch_6_map:
+        data_map.append({
+            "symbol": item["symbol"],
+            "type": "stock",
+            "title": f"{item['symbol']} Analysis",
+            "title_th": item["title_th"],
+            "content": item["content"],
+            "author": "Antigravity AI"
+        })
+
     async with session_maker() as session:
         for item in data_map:
             print(f"Processing {item['symbol']}...")
