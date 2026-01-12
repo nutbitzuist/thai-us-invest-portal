@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     
     # Admin
     admin_api_key: str = "dev-secret-key"
+
+    # AI
+    openai_api_key: str = None
     
     @property
     def async_database_url(self) -> str:
